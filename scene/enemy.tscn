@@ -1,0 +1,144 @@
+[gd_scene load_steps=19 format=3 uid="uid://bwgxxxqapjyr"]
+
+[ext_resource type="Script" uid="uid://c3exihgcjbhhf" path="res://scripts/enemy.gd" id="1_f87vc"]
+[ext_resource type="Texture2D" uid="uid://b53bdukkwom0d" path="res://art/Tiny Swords/Tiny Swords (Update 010)/Factions/Goblins/Troops/Torch/Yellow/Torch_Yellow.png" id="1_h08p8"]
+[ext_resource type="PackedScene" uid="uid://c34jn6bax50d3" path="res://components/health_component.tscn" id="3_8u16h"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_f87vc"]
+atlas = ExtResource("1_h08p8")
+region = Rect2(0, 384, 192, 192)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_8u16h"]
+atlas = ExtResource("1_h08p8")
+region = Rect2(192, 384, 192, 192)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_b7koy"]
+atlas = ExtResource("1_h08p8")
+region = Rect2(384, 384, 192, 192)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_yvcfn"]
+atlas = ExtResource("1_h08p8")
+region = Rect2(576, 384, 192, 192)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_ulb22"]
+atlas = ExtResource("1_h08p8")
+region = Rect2(768, 384, 192, 192)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_1e552"]
+atlas = ExtResource("1_h08p8")
+region = Rect2(960, 384, 192, 192)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_vgurf"]
+atlas = ExtResource("1_h08p8")
+region = Rect2(0, 192, 192, 192)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_kqmod"]
+atlas = ExtResource("1_h08p8")
+region = Rect2(192, 192, 192, 192)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_qhqle"]
+atlas = ExtResource("1_h08p8")
+region = Rect2(384, 192, 192, 192)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_pw261"]
+atlas = ExtResource("1_h08p8")
+region = Rect2(576, 192, 192, 192)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_rs6j2"]
+atlas = ExtResource("1_h08p8")
+region = Rect2(768, 192, 192, 192)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_0n578"]
+atlas = ExtResource("1_h08p8")
+region = Rect2(960, 192, 192, 192)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_sj55t"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_f87vc")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_8u16h")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_b7koy")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_yvcfn")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_ulb22")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_1e552")
+}],
+"loop": false,
+"name": &"attack",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_vgurf")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_kqmod")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_qhqle")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_pw261")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_rs6j2")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_0n578")
+}],
+"loop": true,
+"name": &"run",
+"speed": 10.0
+}]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_8u16h"]
+radius = 15.0
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_f87vc"]
+size = Vector2(26, 33)
+
+[node name="enemy" type="CharacterBody2D"]
+script = ExtResource("1_f87vc")
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
+sprite_frames = SubResource("SpriteFrames_sj55t")
+animation = &"run"
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+position = Vector2(0, 17)
+shape = SubResource("CircleShape2D_8u16h")
+
+[node name="AreaAttack" type="Area2D" parent="."]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="AreaAttack"]
+position = Vector2(13, 11)
+shape = SubResource("RectangleShape2D_f87vc")
+debug_color = Color(2.14182e-06, 0.649242, 0.151707, 0.42)
+
+[node name="Components" type="Node2D" parent="."]
+
+[node name="HealthComponent" parent="Components" node_paths=PackedStringArray("progress_bar") instance=ExtResource("3_8u16h")]
+progress_bar = NodePath("../../ProgressBar")
+
+[node name="ProgressBar" type="ProgressBar" parent="."]
+modulate = Color(0.937916, 0, 0.117753, 1)
+offset_left = -44.0
+offset_top = -56.0
+offset_right = 45.0
+offset_bottom = -43.0
+value = 100.0
+show_percentage = false
+
+[connection signal="animation_finished" from="AnimatedSprite2D" to="." method="_on_animated_sprite_2d_animation_finished"]
+[connection signal="body_entered" from="AreaAttack" to="." method="_on_area_attack_body_entered"]
+[connection signal="body_exited" from="AreaAttack" to="." method="_on_area_attack_body_exited"]
